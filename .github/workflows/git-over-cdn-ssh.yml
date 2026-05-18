@@ -50,6 +50,12 @@ jobs:
           : "${SSH_PRIVATE_KEY:?Set ALAS_UPD_SSH_PRIVATE_KEY secret}"
           : "${REMOTE_PATH:?Set ALAS_UPD_REMOTE_PATH secret}"
 
+          echo "::add-mask::$SSH_HOST"
+          echo "::add-mask::$SSH_PORT"
+          echo "::add-mask::$SSH_USER"
+          echo "::add-mask::$SSH_USER@$SSH_HOST"
+          echo "::add-mask::$REMOTE_PATH"
+
           install -m 700 -d ~/.ssh
           printf '%s\n' "$SSH_PRIVATE_KEY" > ~/.ssh/id_ed25519
           chmod 600 ~/.ssh/id_ed25519
