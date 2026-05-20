@@ -79,8 +79,7 @@ class Device(Screenshot, Control, AppControl, Input):
     stuck_timer_long = Timer(195, count=195).start()
     stuck_long_wait_list = ['BATTLE_STATUS_S', 'PAUSE', 'LOGIN_CHECK', 'TEMPLATE_MANJUU']
     _prev_fingerprint = None
-    _consecutive_identical_screenshots = 0
-    IMAGE_STUCK_THRESHOLD = 86
+    _stuck_image_timer = Timer(30, count=0)
 
     def __init__(self, *args, **kwargs):
         # Initialize platform attribute for emulator control
@@ -322,7 +321,7 @@ class Device(Screenshot, Control, AppControl, Input):
         self.detect_record = set()
         self.stuck_timer.reset()
         self.stuck_timer_long.reset()
-        self._consecutive_identical_screenshots = 0
+        self._stuck_image_timer.clear()
 
     def _check_image_stuck(self):
         if self.image is None:
@@ -332,19 +331,18 @@ class Device(Screenshot, Control, AppControl, Input):
         fp = hash(small.tobytes())
 
         if self._prev_fingerprint is not None and fp == self._prev_fingerprint:
-            self._consecutive_identical_screenshots += 1
+            self._stuck_image_timer.start()
+            if self._stuck_image_timer.reached():
+                show_function_call()
+                logger.warning(f'Screenshot unchanged for over {self._stuck_image_timer.limit}s')
+                self.stuck_record_clear()
+                if self.app_is_running():
+                    raise GameStuckError('Screenshot not changing')
+                else:
+                    raise GameNotRunningError('Game died')
         else:
-            self._consecutive_identical_screenshots = 0
             self._prev_fingerprint = fp
-
-        if self._consecutive_identical_screenshots >= self.IMAGE_STUCK_THRESHOLD:
-            show_function_call()
-            logger.warning(f'Screenshot unchanged for {self._consecutive_identical_screenshots} frames')
-            self.stuck_record_clear()
-            if self.app_is_running():
-                raise GameStuckError('Screenshot not changing')
-            else:
-                raise GameNotRunningError('Game died')
+            self._stuck_image_timer.clear()
 
     def stuck_record_check(self):
         """
