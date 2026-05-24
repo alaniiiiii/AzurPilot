@@ -8,8 +8,7 @@ Deploy:
     # [Developer] Use 'dev', 'app', etc, to try new features
     # [Other] Use 'master', the stable branch
     Branch: master
-    # Filepath of git executable `git.exe`
-    # [Other] Use you own git
+    # Filepath of git executable.
     GitExecutable: ./.venv/bin/git
     # Set git proxy
     # [CN user] Use your local http proxy (http://127.0.0.1:{port}) or socks5 proxy (socks5://127.0.0.1:{port})
@@ -24,8 +23,7 @@ Deploy:
     AutoUpdate: true
 
   Python:
-    # Filepath of python executable `python.exe`
-    # [Other] Use you own python, and its version should be 3.14.x 64bit
+    # Filepath of python executable.
     PythonExecutable: ./.venv/bin/python
     # URL of pypi mirror
     # [CN user] Use 'https://mirrors.aliyun.com/pypi/simple' for faster and more stable download
@@ -36,8 +34,7 @@ Deploy:
     InstallDependencies: true
 
   Adb:
-    # Filepath of ADB executable `adb.exe`
-    # [Other] Use you own latest ADB, but not the ADB in your emulator
+    # Filepath of ADB executable.
     AdbExecutable: ./.venv/bin/adb
     # Whether to replace ADB
     # Chinese emulators (NoxPlayer, LDPlayer, MemuPlayer, MuMuPlayer) use their own ADB, instead of the latest.
