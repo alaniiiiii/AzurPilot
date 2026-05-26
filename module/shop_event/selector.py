@@ -21,6 +21,53 @@ FILTER_ATTR = ('group', 'sub_genre', 'tier')
 FILTER = Filter(FILTER_REGEX, FILTER_ATTR)
 
 
+def parse_filter_amount(filter_string):
+    """
+    Parse optional amount suffix from event shop filter.
+
+    Examples:
+        Cube:5 > Oil:2 -> {'cube': 5, 'oil': 2}
+        EquipSSR > Cube -> {}
+    """
+    out = {}
+    for part in str(filter_string).split('>'):
+        part = part.strip()
+        if ':' not in part:
+            continue
+        name, amount = part.rsplit(':', 1)
+        name = name.strip()
+        try:
+            amount = int(amount.strip())
+        except ValueError:
+            continue
+        if amount <= 0:
+            continue
+        result = FILTER_REGEX.search(name.replace(' ', '').lower())
+        if result is None:
+            continue
+        normalized = ''.join(value or '' for value in result.groups())
+        out[normalized] = amount
+    return out
+
+
+def strip_filter_amount(filter_string):
+    """
+    Remove optional amount suffix before passing filters to base Filter.
+    """
+    out = []
+    for part in str(filter_string).split('>'):
+        part = part.strip()
+        if ':' in part:
+            name, amount = part.rsplit(':', 1)
+            try:
+                int(amount.strip())
+                part = name.strip()
+            except ValueError:
+                pass
+        out.append(part)
+    return ' > '.join(out)
+
+
 EVENT_SHOP_PRESET_FILTER = {
     'all': """
         EquipUR > EquipSSR > Cube > GachaTicket

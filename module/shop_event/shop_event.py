@@ -7,7 +7,7 @@ from module.shop.assets import NAV_GENERAL, NAV_EVENT
 from module.shop_event.assets import NO_NAV_EVENT_CHECK
 from module.shop_event.clerk import EventShopClerk, ItemNotFoundError
 from module.shop_event.item import EventShopItem, UR_SHIP_PRICES_IN_URPT, COIN_PRICE_IN_URPT, URPT_PRICE_IN_PT
-from module.shop_event.selector import EVENT_SHOP_PRESET_FILTER, FILTER
+from module.shop_event.selector import EVENT_SHOP_PRESET_FILTER, FILTER, parse_filter_amount, strip_filter_amount
 from module.ui.assets import SHOP_GOTO_MUNITIONS
 from module.ui.page import page_shop, page_munitions
 
@@ -184,6 +184,10 @@ class EventShop(EventShopClerk):
             logger.error(f"Unknown cost type: {item.cost} for item: {str(item)}")
             return 0
 
+    @staticmethod
+    def item_filter_key(item: EventShopItem) -> str:
+        return ''.join(str(value or '') for value in (item.group, item.sub_genre, item.tier))
+
     def _run(self):
         """
         Pages:
@@ -205,7 +209,8 @@ class EventShop(EventShopClerk):
             filter = self.config.EventShop_CustomFilter
         else:
             filter = EVENT_SHOP_PRESET_FILTER[self.config.EventShop_PresetFilter]
-        FILTER.load(filter)
+        filter_amount = parse_filter_amount(filter)
+        FILTER.load(strip_filter_amount(filter))
         items = FILTER.apply(items)
         items += urpt_related_items
         if not len(items):
@@ -217,6 +222,9 @@ class EventShop(EventShopClerk):
         for item in items:
             logger.hr(f"Attempting to buy item: {str(item)}", level=3)
             affordable_amount = self.calculate_affordable_amount(item)
+            amount_limit = filter_amount.get(self.item_filter_key(item))
+            if amount_limit is not None:
+                affordable_amount = min(affordable_amount, amount_limit)
             if affordable_amount <= 0:
                 logger.warning(f"Cannot afford to buy any of item: {str(item)}.")
                 if self.is_event_ended:
@@ -236,7 +244,10 @@ class EventShop(EventShopClerk):
                     logger.info("Event is not ended, stopping further purchases to avoid overspending.")
                     break
             else:
-                self.event_shop_buy_item(item)
+                if amount_limit is not None and amount_limit < item.count:
+                    self.event_shop_buy_item(item, amount=amount_limit)
+                else:
+                    self.event_shop_buy_item(item)
                 logger.info(f"Successfully bought item: {str(item)}")
                 self.get_current_pts()
         return True
