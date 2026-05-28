@@ -1018,7 +1018,10 @@ class OSMap(OSFleet, Map, GlobeCamera, StorageHandler, StrategicSearchHandler):
             if self.combat_appear():
                 self.on_auto_search_battle_count_add()
                 if strategic and self.config.task_switched():
-                    self.interrupt_auto_search()
+                    if self.config.task.command == "OpsiMeowfficerFarming":
+                        logger.info("Short meow search is running, delay task switch until search finished")
+                    else:
+                        self.interrupt_auto_search()
                 if interrupt_confirm:
                     self.interrupt_auto_search(goto_main=False)
                 result = self.auto_search_combat(drop=drop)
