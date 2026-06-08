@@ -32,6 +32,7 @@ class IslandShopBase(Island, WarehouseOCR):
         self.warehouse_counts = {}  # 仓库识别到的产品
         self.to_post_products = {}
         self.current_totals = {}
+        self._stalled_products = set()  # 游戏层材料不足的产品，本轮跳过
 
         # 特殊材料（子类可覆盖）
         self.special_materials = {}
@@ -312,6 +313,10 @@ class IslandShopBase(Island, WarehouseOCR):
         for idx, (name, target) in enumerate(self.post_products):
             current = virtual_totals.get(name, 0)
             if current < target:
+                # 此前游戏中材料不足 → 本轮跳过，等后续模块补料
+                if name in self._stalled_products:
+                    logger.info(f"槽位{idx + 1} {name} 此前游戏中材料不足，本轮跳过")
+                    continue
                 deficit = target - current
                 # 检查能否至少生产一部分（>0 即材料部分可得）
                 if self.get_max_producible(name, min(6, deficit)) <= 0:
@@ -704,6 +709,7 @@ class IslandShopBase(Island, WarehouseOCR):
             return
 
         # 非常驻餐品模式：处理所有产品需求
+        to_post_before = set(self.to_post_products.keys())
         products_to_process = list(self.to_post_products.items())
 
         # 如果有多个产品需求，按槽位顺序排序（原料优先）
@@ -794,6 +800,11 @@ class IslandShopBase(Island, WarehouseOCR):
             # 如果所有岗位都已分配，退出循环
             if post_index >= total_idle_posts:
                 break
+
+        # 更新停滞标记：生产失败的记录下来，成功的清除
+        remaining = set(self.to_post_products.keys())
+        self._stalled_products.update(to_post_before & remaining)
+        self._stalled_products.difference_update(to_post_before - remaining)
 
         if self.to_post_products:
             logger.info(f"生产安排完成，剩余需求: {self.to_post_products}")
