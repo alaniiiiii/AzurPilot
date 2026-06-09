@@ -242,7 +242,6 @@ class IslandBusiness(Island):
 
         logger.info("切换到经营页签")
         self.post_manage_mode(POST_MANAGE_BUSINESS)
-        self.device.sleep(3)
         self.device.sleep(1)
 
         # 处理每日首次进入可能出现的美食评审界面
@@ -485,7 +484,7 @@ class IslandBusiness(Island):
             # 无识别的界面元素，点击安全区域等待
             else:
                 self.device.click(BUSINESS_REWARD_SAFE_AREA)
-                self.device.sleep(0.5)
+                self.device.sleep(1)
 
             # 统一在循环末尾递增 timeout，确保每次循环仅递增一次
             timeout += 1
