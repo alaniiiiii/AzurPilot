@@ -336,7 +336,7 @@
     },
     "IslandAirDrop": {
       "name": "每日补给",
-      "help": ""
+      "help": "仅支持minitouch"
     },
     "Daemon": {
       "name": "半自动点击",
@@ -3320,7 +3320,7 @@
   "IslandFarm": {
     "_info": {
       "name": "农田",
-      "help": "仅支持minitouch"
+      "help": ""
     },
     "Positions": {
       "name": "农田岗位",
