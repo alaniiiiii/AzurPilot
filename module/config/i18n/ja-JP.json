@@ -3508,7 +3508,7 @@
     },
     "MineSilver": {
       "name": "采银矿岗位数",
-      "help": "",
+      "help": "アイドル鉱山ポストのいくつかを銀の生産に割り当て、残りは空きのままにします。",
       "0": "0",
       "1": "1",
       "2": "2",
@@ -3551,7 +3551,7 @@
     },
     "CutElegant": {
       "name": "伐典雅之木岗位数",
-      "help": "",
+      "help": "アイドル林業ポストのいくつかを高級木材の生産に割り当て、残りは空きのままにします。",
       "0": "0",
       "1": "1",
       "2": "2",
@@ -4570,6 +4570,10 @@
     "LastSteal": {
       "name": "前回実行時間",
       "help": ""
+    },
+    "VisitOtherIsland": {
+      "name": "他プレイヤーの島を訪問",
+      "help": "オフにすると、自分の島の空中補給のみを回収し、他プレイヤーの島へは移動しません。"
     }
   },
   "IslandDailyOrder": {
@@ -4624,6 +4628,46 @@
     "Blacklist": {
       "name": "貨物ブラックリスト",
       "help": "ブラックリスト貨物を検出したら委託を変更します。現在はミルクのみ対応。"
+    }
+  },
+  "IslandBusiness": {
+    "_info": {
+      "name": "経営モジュール",
+      "help": "島の店舗経営を管理します"
+    },
+    "BatchEnabled": {
+      "name": "バッチ経営を有効化",
+      "help": "5つの店舗を2バッチに分割して経営し、スタッフの競合を回避",
+      "True": "有効",
+      "False": "無効"
+    },
+    "Batch1Shops": {
+      "name": "第1バッチ店舗",
+      "help": "最初のバッチで経営する店舗を選択",
+      "1": "有魚餐馆",
+      "2": "白熊飲品",
+      "3": "啾啾簡餐",
+      "4": "烏魚烤肉",
+      "5": "啾珈琲"
+    },
+    "Batch2Shops": {
+      "name": "第2バッチ店舗",
+      "help": "2番目のバッチで経営する店舗を選択",
+      "1": "有魚餐馆",
+      "2": "白熊飲品",
+      "3": "啾啾簡餐",
+      "4": "烏魚烤肉",
+      "5": "啾珈琲"
+    },
+    "SeasonalReplaceEnabled": {
+      "name": "季節限定置き換え",
+      "help": "季節限定メニューの在庫が少ない場合に自動置き換え",
+      "True": "有効",
+      "False": "無効"
+    },
+    "SeasonalThreshold": {
+      "name": "季節置き換え閾値",
+      "help": "在庫がこの数値を下回ると置き換えを実行"
     }
   },
   "IslandBusinessShop1": {
@@ -4750,7 +4794,22 @@
       "tofu_combo": "クラシック豆腐セット",
       "hearty_meal": "まん玉定食",
       "fo_tiao": "仏跳牆",
-      "amaranth_rice_ball": "アマランスおにぎり"
+      "amaranth_rice_ball": "苋菜饭团"
+    },
+    "SeasonalFallback": {
+      "name": "季節代替メニュー",
+      "help": "季節限定メニューの在庫不足時に置き換えるメニュー",
+      "None": "なし",
+      "double_bamboo_shoots": "涼拌双筍",
+      "tofu_meat": "肉末焼豆腐",
+      "tofu_combo": "經典豆腐套餐",
+      "hearty_meal": "綿玉定食",
+      "fo_tiao": "佛跳牆",
+      "amaranth_rice_ball": "莧菜飯糰"
+    },
+    "BoostReplaceFilter": {
+      "name": "ブースト置き換えフィルター",
+      "help": "複数のブースト商品が検出された場合、フィルター順で最初のものを優先して置き換えます；置き換えスロットは商品5→1から最後の空でないスロットを探します"
     }
   },
   "IslandBusinessShop2": {
@@ -4887,7 +4946,11 @@
       "fruit_paradise": "フルーツパラダイス",
       "lavender_tea": "ラベンダーティー",
       "sunny_honey": "サニーハニー",
-      "watermelon_juice": "スイカジュース"
+      "watermelon_juice": "西瓜汁"
+    },
+    "BoostReplaceFilter": {
+      "name": "ブースト置き換えフィルター",
+      "help": "複数のブースト商品が検出された場合、フィルター順で最初のものを優先して置き換えます；置き換えスロットは商品5→1から最後の空でないスロットを探します"
     }
   },
   "IslandBusinessShop3": {
@@ -5010,12 +5073,16 @@
       "berry_orange": "ベリーオレンジデザートセット",
       "strawberry_charlotte": "シャーロット",
       "seafood_rice": "シーフードライス"
+    },
+    "BoostReplaceFilter": {
+      "name": "ブースト置き換えフィルター",
+      "help": "複数のブースト商品が検出された場合、フィルター順で最初のものを優先して置き換えます；置き換えスロットは商品5→1から最後の空でないスロットを探します"
     }
   },
   "IslandBusinessShop4": {
     "_info": {
       "name": "イカ焼き",
-      "help": ""
+      "help": "メニューは1～8の順に生産されます。生産目標はメニューX数量オプションで、前の項目が完全に満たされてから次の項目が実行されます。後続の項目は実行時にそれ以前の項目の達成に影響しません。"
     },
     "Char1": {
       "name": "キャラクター1",
@@ -5086,58 +5153,62 @@
     "Product1": {
       "name": "商品1",
       "help": "",
-      "None": "なし",
-      "roasted_skewer": "焼き串",
+      "None": "None",
+      "roasted_skewer": "炭焼き串",
       "stir_fried_chicken": "鶏肉炒め",
-      "steak_bowl": "ステーキ丼",
-      "carnival": "カーニバル",
-      "double_energy": "ダブルエナジー"
+      "steak_bowl": "ハンバーグ丼",
+      "carnival": "バーベキュー祭り",
+      "double_energy": "エネルギーダブルセット"
     },
     "Product2": {
       "name": "商品2",
       "help": "",
-      "None": "なし",
-      "roasted_skewer": "焼き串",
+      "None": "None",
+      "roasted_skewer": "炭焼き串",
       "stir_fried_chicken": "鶏肉炒め",
-      "steak_bowl": "ステーキ丼",
-      "carnival": "カーニバル",
-      "double_energy": "ダブルエナジー"
+      "steak_bowl": "ハンバーグ丼",
+      "carnival": "バーベキュー祭り",
+      "double_energy": "エネルギーダブルセット"
     },
     "Product3": {
       "name": "商品3",
       "help": "",
-      "None": "なし",
-      "roasted_skewer": "焼き串",
+      "None": "None",
+      "roasted_skewer": "炭焼き串",
       "stir_fried_chicken": "鶏肉炒め",
-      "steak_bowl": "ステーキ丼",
-      "carnival": "カーニバル",
-      "double_energy": "ダブルエナジー"
+      "steak_bowl": "ハンバーグ丼",
+      "carnival": "バーベキュー祭り",
+      "double_energy": "エネルギーダブルセット"
     },
     "Product4": {
       "name": "商品4",
       "help": "",
-      "None": "なし",
-      "roasted_skewer": "焼き串",
+      "None": "None",
+      "roasted_skewer": "炭焼き串",
       "stir_fried_chicken": "鶏肉炒め",
-      "steak_bowl": "ステーキ丼",
-      "carnival": "カーニバル",
-      "double_energy": "ダブルエナジー"
+      "steak_bowl": "ハンバーグ丼",
+      "carnival": "バーベキュー祭り",
+      "double_energy": "エネルギーダブルセット"
     },
     "Product5": {
       "name": "商品5",
       "help": "",
-      "None": "なし",
-      "roasted_skewer": "焼き串",
+      "None": "None",
+      "roasted_skewer": "炭焼き串",
       "stir_fried_chicken": "鶏肉炒め",
-      "steak_bowl": "ステーキ丼",
-      "carnival": "カーニバル",
-      "double_energy": "ダブルエナジー"
+      "steak_bowl": "ハンバーグ丼",
+      "carnival": "バーベキュー祭り",
+      "double_energy": "エネルギーダブルセット"
+    },
+    "BoostReplaceFilter": {
+      "name": "ブースト置き換えフィルター",
+      "help": "複数のブースト商品が検出された場合、フィルター順で最初のものを優先して置き換えます；置き換えスロットは商品5→1から最後の空でないスロットを探します"
     }
   },
   "IslandBusinessShop5": {
     "_info": {
       "name": "ジューコーヒー",
-      "help": ""
+      "help": "メニューは1～8の順に生産されます。生産目標はメニューX数量オプションで、前の項目が完全に満たされてから次の項目が実行されます。後続の項目は実行時にそれ以前の項目の達成に影響しません。"
     },
     "Char1": {
       "name": "キャラクター1",
@@ -5208,52 +5279,56 @@
     "Product1": {
       "name": "商品1",
       "help": "",
-      "None": "なし",
+      "None": "None",
       "cheese": "チーズ",
-      "strawberry_milkshake": "ストロベリーミルクセーキ",
-      "morning_light": "モーニングライト",
-      "wake_up_call": "ウェイクアップコール",
+      "strawberry_milkshake": "いちごミルクティー",
+      "morning_light": "朝の光セット",
+      "wake_up_call": "目覚ましセット",
       "fruity_fruitier": "フルーティーフルーティエ"
     },
     "Product2": {
       "name": "商品2",
       "help": "",
-      "None": "なし",
+      "None": "None",
       "cheese": "チーズ",
-      "strawberry_milkshake": "ストロベリーミルクセーキ",
-      "morning_light": "モーニングライト",
-      "wake_up_call": "ウェイクアップコール",
+      "strawberry_milkshake": "いちごミルクティー",
+      "morning_light": "朝の光セット",
+      "wake_up_call": "目覚ましセット",
       "fruity_fruitier": "フルーティーフルーティエ"
     },
     "Product3": {
       "name": "商品3",
       "help": "",
-      "None": "なし",
+      "None": "None",
       "cheese": "チーズ",
-      "strawberry_milkshake": "ストロベリーミルクセーキ",
-      "morning_light": "モーニングライト",
-      "wake_up_call": "ウェイクアップコール",
+      "strawberry_milkshake": "いちごミルクティー",
+      "morning_light": "朝の光セット",
+      "wake_up_call": "目覚ましセット",
       "fruity_fruitier": "フルーティーフルーティエ"
     },
     "Product4": {
       "name": "商品4",
       "help": "",
-      "None": "なし",
+      "None": "None",
       "cheese": "チーズ",
-      "strawberry_milkshake": "ストロベリーミルクセーキ",
-      "morning_light": "モーニングライト",
-      "wake_up_call": "ウェイクアップコール",
+      "strawberry_milkshake": "いちごミルクティー",
+      "morning_light": "朝の光セット",
+      "wake_up_call": "目覚ましセット",
       "fruity_fruitier": "フルーティーフルーティエ"
     },
     "Product5": {
       "name": "商品5",
       "help": "",
-      "None": "なし",
+      "None": "None",
       "cheese": "チーズ",
-      "strawberry_milkshake": "ストロベリーミルクセーキ",
-      "morning_light": "モーニングライト",
-      "wake_up_call": "ウェイクアップコール",
+      "strawberry_milkshake": "いちごミルクティー",
+      "morning_light": "朝の光セット",
+      "wake_up_call": "目覚ましセット",
       "fruity_fruitier": "フルーティーフルーティエ"
+    },
+    "BoostReplaceFilter": {
+      "name": "ブースト置き換えフィルター",
+      "help": "複数のブースト商品が検出された場合、フィルター順で最初のものを優先して置き換えます；置き換えスロットは商品5→1から最後の空でないスロットを探します"
     }
   },
   "Daemon": {
