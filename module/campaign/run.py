@@ -468,8 +468,7 @@ class CampaignRun(CampaignEvent, ShopStatus):
                 logger.info(str(e))
                 # 撤退后关闭任务：禁用当前任务，调度器将运行后续任务
                 if str(e) == 'DefeatWithdraw=withdraw_stop':
-                    self.config.modified[f'{self.config.task.command}.Scheduler.Enable'] = False
-                    self.config.update()
+                    self.config.Scheduler_Enable = False
                 break
 
             # 更新配置
