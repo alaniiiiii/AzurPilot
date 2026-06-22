@@ -581,6 +581,7 @@ OpsiHazard1Leveling:
 OpsiScheduling:
   Scheduler:
     NextRun:
+      type: stored
       display: hide
     SuccessInterval:
       value: 1440
