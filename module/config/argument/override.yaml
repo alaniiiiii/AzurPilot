@@ -583,10 +583,10 @@ OpsiScheduling:
     NextRun:
       display: hide
     SuccessInterval:
-      value: 60
+      value: 1440
       display: hide
     FailureInterval:
-      value: 60
+      value: 1440
       display: hide
     ServerUpdate:
       value: 00:00
