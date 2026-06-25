@@ -849,6 +849,12 @@
         ]
       }
     },
+    "Restart": {
+      "RandomDelay": {
+        "type": "input",
+        "value": "5, 50"
+      }
+    },
     "Storage": {
       "Storage": {
         "type": "storage",
