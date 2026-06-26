@@ -142,11 +142,20 @@ RESTRICTED_DEVICE_IDS = {
 RESTRICTED_DEVICE_MESSAGE = (
     "你的公网IP已泄露 请加群https://join.nanoda.work/#/join联系我们解除安全限制"
 )
-PUBLIC_WEBUI_WITHOUT_PASSWORD_MESSAGE = "当前配置允许所有设备访问，请添加密码\n\n设置方法:\n在config/deploy.yaml中添加:\nWebUI:\n  Password: 你的密码\n然后重启\n\n温馨提示：密码推荐大小写字母+数字不小于六位\n\n目前配置允許所有裝置存取，請新增密碼。\n\n設定方法:\n在config/deploy.yaml中添加:\nWebUI:\n  Password: 你的密碼\n然後重新啟動\n\n溫馨提示：密碼建議包含大小寫英文字母與數字，且不少於六位。\n\nThe current configuration allows access from all devices. Please set a password.\n\nHow to configure:\nAdd the following to config/deploy.yaml:\nWebUI:\n  Password: your_password\nThen restart the application.\n\nTip: It is recommended to use a password containing uppercase and lowercase letters as well as numbers, with a minimum length of 6 characters.\n\n現在の設定では、すべてのデバイスからアクセスできます。パスワードを設定してください。\n\n設定方法:\nconfig/deploy.yaml に以下を追加してください:\nWebUI:\n  Password: あなたのパスワード\nその後、アプリケーションを再起動してください。\n\nヒント：パスワードは英大文字・英小文字・数字を含み、6文字以上にすることを推奨します。"
 PUBLIC_WEBUI_PASSWORD_GENERATE_FAILED_MESSAGE = (
     "当前配置允许所有设备访问，但自动生成密码失败，请手动在 config/deploy.yaml 设置 Password 后重启。"
 )
 WEBUI_AUTO_PASSWORD_FILE = "password.txt"
+
+
+def is_demo_mode():
+    """
+    判断是否处于演示环境。
+
+    Returns:
+        bool: True 表示 DEMO=1。
+    """
+    return os.environ.get("DEMO") == "1"
 
 
 def is_public_webui_host(host):
@@ -210,6 +219,9 @@ def ensure_public_webui_password(key):
     Returns:
         tuple[str | None, str | None]: 有效密码和失败原因。
     """
+    if is_demo_mode():
+        return key, None
+
     host = State.webui_host or State.deploy_config.WebuiHost
     if not is_public_webui_host(host) or is_webui_password_set(key):
         return key, None
@@ -5168,7 +5180,7 @@ def app():
         return True
 
     def _block_public_webui_password_error():
-        if password_error is None:
+        if is_demo_mode() or password_error is None:
             return False
         popup(
             "安全保护",
