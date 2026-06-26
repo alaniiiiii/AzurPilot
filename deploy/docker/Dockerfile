@@ -24,13 +24,14 @@ COPY --from=ghcr.io/astral-sh/uv:latest /uv /usr/local/bin/uv
 
 RUN apt-get update && \
     apt-get install -y --no-install-recommends \
+    ca-certificates \
+    git \
+    openssh-client \
     libgomp1 \
     libgl1 \
     libglib2.0-0 \
     libxcb1 && \
     apt-get clean && \
     rm -rf /var/lib/apt/lists/*
-
-COPY . .
 
 CMD ["uv", "run", "python", "gui.py"]
